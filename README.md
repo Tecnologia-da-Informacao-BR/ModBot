@@ -1,6 +1,5 @@
 ModBot
 
-Under construction
-
+🛠️ Under construction
 
 pip install discord.py python-dotenv
