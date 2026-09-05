@@ -2,58 +2,58 @@ import os
 import discord
 from dotenv import load_dotenv
 
-# Carrega as variáveis do .env
+# Load environment variables from the .env file
 load_dotenv()
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_COMMAND = int(os.getenv("CHANNEL_COMMAND"))
 
-# Configura as intents
+# Configure Discord intents
 intents = discord.Intents.default()
-intents.message_content = True  # Necessário para ler mensagens
+intents.message_content = True  # Required to read message content
 
-# Cria o cliente
+# Create the Discord client
 client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
 
-    # Obtém o canal
+    # Get the configured channel from the cache
     channel = client.get_channel(CHANNEL_COMMAND)
 
-    # Caso não esteja em cache, busca pela API
+    # If the channel is not cached, fetch it from the Discord API
     if channel is None:
         channel = await client.fetch_channel(CHANNEL_COMMAND)
 
-    # Envia a mensagem
+    # Send the startup message
     await channel.send("Hello World!")
 
 @client.event
 async def on_message(message):
-    # Ignora mensagens do próprio bot
+    # Ignore messages sent by the bot itself
     if message.author == client.user:
         return
 
-    # Responde apenas no canal configurado
-    #if message.channel.id != CHANNEL_COMMAND:
-    #    return
+    # Respond only in the configured channel
+    # if message.channel.id != CHANNEL_COMMAND:
+    #     return
 
-    # Comando !modbot
+    # !modbot command
     if message.content.strip().lower() == "!modbot":
-        #await message.channel.send("Estou online")
+        # await message.channel.send("Estou online")
         await message.reply("Estou online")
 
-    # Comando !modbot tudo bem?
+    # !modbot tudo bem? command
     if message.content.strip().lower() == "!modbot tudo bem?":
         await message.reply("Tudo bem! Estou funcionando, e você, está bem?")
-        #await message.channel.send(
-        #    f"Tudo bem, {message.author.mention}! Estou funcionando, e você, está bem?"
-        #)
+        # await message.channel.send(
+        #     f"Tudo bem, {message.author.mention}! Estou funcionando, e você, está bem?"
+        # )
 
-    # Comando !modbot tudo bem?
+    # !modbot qual é o seu propósito? command
     if message.content.strip().lower() == "!modbot qual é o seu propósito?":
         await message.reply("Serei o novo moderador de spams daqui :saluting_face:")
 
-# Inicia o bot
+# Start the bot
 client.run(DISCORD_TOKEN)
